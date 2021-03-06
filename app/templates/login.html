@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+    </head>
+    <body>
+        <h1>
+            Choose a username to play
+        </h1>
+        <form method="post" onsubmit="return check()">
+        <input type="text" id="user_name" name="user_name" placeholder="Your username here..." value="">
+        <input  id="submit" type="submit" value="Let's go">
+        </form>
+    </body>
+    <script>
+        var values = JSON.parse('{{values|safe}}');
+        
+        console.log(values);
+
+        function check(){
+            var name = String(document.getElementById("user_name").value);
+            var flag = 0;
+            for(var i = 0; i < values.length; i++){
+                console.log(name + " : " + values[i]);
+                if(name.localeCompare(values[i]) == 0){
+                    alert("Name taken! Choose another user name");
+                    flag = 1;
+                    break;
+                }
+            }
+
+            if(!flag){
+                return true;
+            }else{
+                return false;
+            }
+        }
+    </script>
+</html>

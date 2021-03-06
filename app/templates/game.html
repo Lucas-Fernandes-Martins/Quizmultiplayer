@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.12/dist/vue.js"></script>
+        <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+        <link rel="stylesheet" href="{{url_for('static', filename='css/game.css')}}">
+    </head>
+    <body>
+        <div id="panel">
+        <h1>Let's play!</h1>
+        {% for user in users %}
+        <h3> Jogador: {{user.name}} Pontos: {{user.points}} </h3>
+        {% endfor %}
+        <div>
+            <div id="card">
+                <h1 id="text">Pergunta:</h1>
+                <h2>[[question]]</h2>
+            </div>
+        </div>
+        <alter v-for="item in alternatives" v-bind:item="item" v-bind:verify_answer="verify_answer"></alter>
+        </div>
+        <script>
+
+        Vue.component('alter', {
+            delimiters:["[[", "]]"], 
+            props:['item', 'verify_answer'], 
+            template:"<button class='options' v-on:click.self='verify_answer(item)'>[[item]]</button>"});
+
+            var panel = new Vue({
+                delimiters: ["[[", "]]"],
+                el: "#panel",
+                data:{
+                    info: JSON.parse('{{info|safe}}'),
+                    question: JSON.parse('{{info|safe}}')[0],
+                    alternatives: JSON.parse('{{info|safe}}').slice(1, 6),
+                    correct: false
+                },
+                methods:{
+                    verify_answer: function verify_answer(item){
+                        if(this.info[6] == item){
+                            alert("Acertou!");
+                            this.correct = true;
+                        }else{
+                            alert("Errou!");
+                        }
+                    }
+                }
+            });
+
+            function change_question(){
+                axios.post('/change_question', {correct : panel.correct}).then(window.location.href = "{{url_for('game')}}");
+            }
+
+            setTimeout(function() { change_question(); }, 10000);
+
+        </script>
+    </body>
+</html>
+
