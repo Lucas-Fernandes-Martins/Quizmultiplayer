@@ -25,6 +25,7 @@ class question(db.Model):
     __bind_key__ = 'question'
     _id = db.Column("id", db.Integer, primary_key=True)
     current = db.Column(db.Integer)
+    first = db.Column(db.Integer)
     def __init__(self):
         self.current = 0
 
@@ -34,11 +35,22 @@ class users(db.Model):
     admin = db.Column(db.Integer)
     ready = db.Column(db.Boolean)
     points = db.Column(db.Integer)
+    current = db.Column(db.Integer)
     def __init__(self, name, admin, ready):
         self.name = name
         self.admin = admin
         self.ready = ready
         self.points = 0
+        self.current = 0
+
+@app.route("/get_users", methods=["GET", "POST"])
+def get_users():
+    usrs = users.query.all()
+    user_list = []
+    for user in usrs:
+        user_list.append(user.name)
+
+    return json.dumps(user_list)
 
 @app.route("/change_question", methods=["GET", "POST"])
 def change_question():
@@ -47,18 +59,37 @@ def change_question():
     if(r["correct"] == True):
         usr = users.query.filter_by(name=session["name"]).first()
         usr.points += 1
-        db.session.commit()
-    qst = question.query.first()
-    qst.current += 0
+    qst = users.query.filter_by(name=session["name"]).first()
+    qst.current += 1
     db.session.commit()
-    return redirect(url_for("game"))
+    return ""
+
+@app.route("/drop")
+def drop():
+    db.drop_all()
+    db.create_all()
+    return "<h1>Databases Deleted!</h1>"
+@app.route("/endgame")
+def endgame():
+    all_users = users.query.all()
+    users_list = []
+    for user in all_users:
+        users_list.append({"name": user.name, "points": user.points, "answered": user.current})
+
+    return render_template("game_over.html", users=users_list)
 
 @app.route("/game")
 def game():
     doc_path = os.getcwd() + "/app/static/json/questions.json"
     q_string = open(doc_path, "r").read()
     questions = json.loads(q_string)
-    qnumber = question.query.first().current
+    qnumber = users.query.filter_by(name=session["name"]).first().current
+    if(qnumber == len(questions)):
+        return redirect(url_for("endgame"))
+    else:
+        print("==========")
+        print(qnumber)
+        print(len(questions))
     info = questions[qnumber]
     all_users = users.query.all()
     users_list = []

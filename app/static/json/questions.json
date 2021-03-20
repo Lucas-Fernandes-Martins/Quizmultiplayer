@@ -1,4 +1,5 @@
 [
     ["Qual a capital do Pará?", "Belém", "São Paulo", "Salvador", "Porto Velho", "Rondônia", "Belém"],
-    ["Em que ano teve início a Revolução Francesa", "1787", "1788", "1789", "1790", "1687", "1789"]
+    ["Em que ano teve início a Revolução Francesa", "1787", "1788", "1789", "1790", "1687", "1789"],
+    ["Quantos alunos tem a USP (dados de 2015)?", "94,875", "915,912", "30,453", "15,389", "150,125","94,875"]
 ]

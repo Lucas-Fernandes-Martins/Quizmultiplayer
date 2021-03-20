@@ -45,16 +45,17 @@
                         }else{
                             alert("Errou!");
                         }
+
+                        change_question();
                     }
                 }
             });
 
             function change_question(){
-                axios.post('/change_question', {correct : panel.correct}).then(window.location.href = "{{url_for('game')}}");
+                axios.post('/change_question', {correct : panel.correct});
+                setTimeout(function(){ window.location.href = "{{url_for('game')}}"; }, 1000);
             }
-
-            setTimeout(function() { change_question(); }, 10000);
-
+            
         </script>
     </body>
 </html>

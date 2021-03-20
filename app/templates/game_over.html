@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+    <head>     
+    </head>
+    <body>
+        {% for item in users %}
+        <h2>Player: {{item.name}} Points: {{item.points}} / {{item.answered}}</h2>
+        {% endfor %}
+    </body>
+    <script>
+        var intervalID = window.setInterval(reload, 1000);
+
+        function reload() {
+            window.location.href = "{{url_for('endgame')}}";
+        }
+    </script>
+</html>
