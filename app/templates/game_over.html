@@ -1,11 +1,23 @@
 <!DOCTYPE html>
 <html>
-    <head>     
+    <head>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+        <link rel="stylesheet" href="{{url_for('static', filename='css/game.css')}}">
     </head>
     <body>
+        <div class="header">
+            <img width="50px" height="50px" src="{{url_for('static', filename='img/ada.png')}}">
+            <div class="header-right">
+              <a href="#about">ADAquiz</a>
+            </div>
+          </div>
+        <div class="container">
+        <h1>Placar</h1>
         {% for item in users %}
-        <h2>Player: {{item.name}} Points: {{item.points}} / {{item.answered}}</h2>
+        <h2>Jogador: {{item.name}} Points: {{item.points}} / {{item.answered}}</h2>
         {% endfor %}
+    </div>
     </body>
     <script>
         var intervalID = window.setInterval(reload, 1000);

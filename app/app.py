@@ -8,6 +8,8 @@ import random
 
 import os
 
+from operator import itemgetter
+
 app = Flask(__name__)
 
 app.secret_key = "12345678910"
@@ -76,7 +78,9 @@ def endgame():
     for user in all_users:
         users_list.append({"name": user.name, "points": user.points, "answered": user.current})
 
-    return render_template("game_over.html", users=users_list)
+    sorted_list = sorted(users_list, key=itemgetter('points'), reverse=True)
+
+    return render_template("game_over.html", users=sorted_list)
 
 @app.route("/game")
 def game():
